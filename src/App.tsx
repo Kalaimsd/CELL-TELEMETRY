@@ -87,6 +87,7 @@ export default function App() {
       await setDoc(docRef, {
         chg_relay_state: newMode === 'charging' ? 1 : 0,
         discharge_relay_state: newMode === 'discharging' ? 1 : 0,
+        state_code: newMode === 'charging' ? 1 : (newMode === 'discharging' ? 2 : 0),
         // Include current values to prevent validation errors if the document is empty
         time: Date.now(),
         voltage: cell.voltage,
