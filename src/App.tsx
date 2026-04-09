@@ -87,8 +87,12 @@ export default function App() {
       await setDoc(docRef, {
         chg_relay_state: newMode === 'charging' ? 1 : 0,
         discharge_relay_state: newMode === 'discharging' ? 1 : 0,
-        // We also need to write the other required fields to satisfy security rules if the document doesn't exist yet,
-        // but typically the ESP32 writes these. For a robust UI, we should use updateDoc, but if it doesn't exist, setDoc with merge.
+        // Include current values to prevent validation errors if the document is empty
+        time: Date.now(),
+        voltage: cell.voltage,
+        current: cell.current,
+        soc: cell.soc,
+        temp: cell.temperature
       }, { merge: true });
     } catch (error) {
       console.error("Error updating mode:", error);
