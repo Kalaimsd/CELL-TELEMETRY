@@ -1,0 +1,25 @@
+{
+  "entities": {
+    "Telemetry": {
+      "title": "Telemetry",
+      "description": "Cell telemetry data from ESP32",
+      "type": "object",
+      "properties": {
+        "time": { "type": "number", "description": "Timestamp" },
+        "voltage": { "type": "number", "description": "Cell voltage" },
+        "current": { "type": "number", "description": "Cell current" },
+        "soc": { "type": "number", "description": "State of charge" },
+        "temp": { "type": "number", "description": "Temperature" },
+        "chg_relay_state": { "type": "number", "description": "Charge relay state" },
+        "discharge_relay_state": { "type": "number", "description": "Discharge relay state" }
+      },
+      "required": ["time", "voltage", "current", "soc", "temp", "chg_relay_state", "discharge_relay_state"]
+    }
+  },
+  "firestore": {
+    "/telemetry/{deviceId}": {
+      "schema": { "$ref": "#/entities/Telemetry" },
+      "description": "Latest telemetry data for a specific device"
+    }
+  }
+}

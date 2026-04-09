@@ -1,0 +1,5 @@
+{
+  "name": "Cell Parameter Tester",
+  "description": "UI for testing and monitoring single battery cell parameters including voltage, current, and temperature.",
+  "requestFramePermissions": []
+}

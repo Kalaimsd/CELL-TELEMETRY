@@ -1,0 +1,58 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: telemetry
+    // Document ID: {deviceId}
+    // Fields:
+    //   - time: number (required) - Timestamp
+    //   - voltage: number (required) - Cell voltage
+    //   - current: number (required) - Cell current
+    //   - soc: number (required) - State of charge
+    //   - temp: number (required) - Temperature
+    //   - chg_relay_state: number (required) - Charge relay state
+    //   - discharge_relay_state: number (required) - Discharge relay state
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+       return request.auth != null;
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function isValidTelemetry() {
+      return hasRequiredFields(['time', 'voltage', 'current', 'soc', 'temp', 'chg_relay_state', 'discharge_relay_state']) &&
+             hasOnlyAllowedFields(['time', 'voltage', 'current', 'soc', 'temp', 'chg_relay_state', 'discharge_relay_state']) &&
+             request.resource.data.time is number &&
+             request.resource.data.voltage is number &&
+             request.resource.data.current is number &&
+             request.resource.data.soc is number &&
+             request.resource.data.temp is number &&
+             request.resource.data.chg_relay_state is number &&
+             request.resource.data.discharge_relay_state is number;
+    }
+
+    match /telemetry/{deviceId} {
+      // Allow read for authenticated users
+      allow read: if isAuthenticated();
+      // Allow write for IoT device (unauthenticated, but must match strict schema)
+      allow create, update: if isValidTelemetry();
+      allow delete: if false;
+    }
+  }
+}
