@@ -48,10 +48,8 @@ service cloud.firestore {
     }
 
     match /telemetry/{deviceId} {
-      // Allow read for authenticated users
-      allow read: if isAuthenticated();
-      // Relaxed write rule for hardware prototyping to prevent 403 errors
-      allow write: if true;
+      // Relaxed read and write rules for hardware prototyping to prevent 403 errors
+      allow read, write: if true;
     }
   }
 }

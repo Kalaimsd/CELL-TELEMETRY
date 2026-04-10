@@ -22,7 +22,8 @@ export default function App() {
     voltage: 3.20,
     current: 0,
     temperature: 25.0,
-    soc: 65.0
+    soc: 65.0,
+    state_code: 0
   });
 
   // --- Authentication ---
@@ -56,7 +57,8 @@ export default function App() {
           voltage: data.voltage ?? 3.20,
           current: data.current ?? 0,
           temperature: data.temp ?? 25.0,
-          soc: data.soc ?? 65.0
+          soc: data.soc ?? 65.0,
+          state_code: data.state_code ?? 0
         });
         
         // Derive mode from relay states
@@ -218,6 +220,9 @@ export default function App() {
         <div className="hidden md:block">
           <h3 className="font-bold text-slate-900 text-xl">System Controls</h3>
           <p className="text-slate-500 font-medium mt-1">Override active cell state</p>
+          <div className="mt-2 inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-mono rounded-lg border border-slate-200">
+            DB State Code: {cell.state_code}
+          </div>
         </div>
         
         <div className="flex items-center justify-center gap-4 w-full md:w-auto">
