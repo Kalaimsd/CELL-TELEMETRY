@@ -79,7 +79,10 @@ export default function App() {
 
   // --- Control Relays (Write to Firebase) ---
   const handleSetMode = async (newMode: CellMode) => {
-    if (!user) return;
+    if (!user) {
+      alert("Please sign in first to control the system.");
+      return;
+    }
     
     // Optimistic UI update
     setMode(newMode);
@@ -89,7 +92,7 @@ export default function App() {
       await setDoc(docRef, {
         chg_relay_state: newMode === 'charging' ? 1 : 0,
         discharge_relay_state: newMode === 'discharging' ? 1 : 0,
-        state_code: newMode === 'charging' ? 1 : (newMode === 'discharging' ? 2 : 0),
+        state_code: newMode === 'charging' ? "1" : (newMode === 'discharging' ? "2" : "0"),
         // Include current values to prevent validation errors if the document is empty
         time: Date.now(),
         voltage: cell.voltage,
@@ -99,6 +102,7 @@ export default function App() {
       }, { merge: true });
     } catch (error) {
       console.error("Error updating mode:", error);
+      alert("Failed to update database. Please check your connection and try again.");
     }
   };
 
